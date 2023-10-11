@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "publish-ghpages": "ng build --configuration production --base-href 'https://AshkanHovold.github.io/ffoEE/' && ngh --dir=dist/ffo-ee"
   },
   "private": true,
   "dependencies": {
