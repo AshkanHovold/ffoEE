@@ -1,34 +1,66 @@
 // prettier-ignore
-import { Component, VERSION } from '@angular/core';
+import { Component, OnInit, VERSION } from '@angular/core';
 import { SalesData } from './salesData';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  salesData:SalesData = new SalesData();
+  currentTime: string = new Date().toISOString();
+  serverEnds:string = new Date(Date.UTC(2023, 9, 16, 23, 59)).toISOString();
+  ngOnInit(): void {
+    this.salesData = new SalesData();
+    this.salesData.setDaysLeft(this.daysBetween(this.serverEnds, this.currentTime));
+  }
   name = 'Angular ' + VERSION.major;
-  salesData = new SalesData();
-
-  datetime = new Date(new Date().toUTCString()).toISOString();
-  timeLocal = new Date(this.datetime).toLocaleString();
-  isoTime = new Date().toISOString();
 
   displayedColumns: string[] = ['label', 'value'];
   tableData: any[] = [];
+  tableDataFood: any[] = [];
+  tableDataOil: any[] = [];
+
+  daysBetween(isoDate1: string, isoDate2: string): number {
+    // Parse the ISO strings into Date objects
+    const date1 = new Date(isoDate1);
+    const date2 = new Date(isoDate2);
+  
+    // Calculate the difference in milliseconds
+    const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+  
+    // Convert the difference from milliseconds to days
+    const daysDifference = differenceInMilliseconds / (1000 * 60 * 60 * 24);
+  
+    return daysDifference;
+  }
+
 
   updateTableData() {
     this.tableData = [
-      { label: 'Turns left', value: this.salesData.turnsLeft },
-      { label: 'Turns on hand', value: this.salesData.turnsOnHand },
-      { label: 'Food to be produced', value: this.salesData.foodToProduce },
-      { label: 'Oil to be produced', value: this.salesData.oilToProduce },
-      { label: 'Food Production', value: this.salesData.foodProduction },
-      { label: 'Oil Production', value: this.salesData.oilProduction },
+      { label: `Turns left (${this.salesData.turnsOnHand}) + (${Math.floor(this.salesData.days * 78)})`, value: this.salesData.turnsLeft },
+      { label: 'Turns on hand', value: this.salesData.turnsOnHand },  
+      { label: 'Sum (if everything on market sells)', value: this.salesData.sum },      
+    ];
+    this.tableDataFood = [
+      
+      { label: 'Food Production', value: this.salesData.foodProduction },      
+      { label: 'Food to be produced', value: this.salesData.foodToProduce },      
       { label: 'Food On Hand', value: this.salesData.foodOnHand },
-      { label: 'Oil On Hand', value: this.salesData.oilOnHand },
+      { label: 'Food on market', value: this.salesData.bushels},    
       { label: 'Final projected food', value: this.salesData.totalFood },
+      { label: 'Food needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalOil * 7.75) },
+      { label: 'Food needed for oil jump', value: Math.floor(this.salesData.totalOil * 8) },
+    ];
+
+    this.tableDataOil = [
+      { label: 'Oil Production', value: this.salesData.oilProduction },
+      { label: 'Oil to be produced', value: this.salesData.oilToProduce },      
+      { label: 'Oil On Hand', value: this.salesData.oilOnHand },
+      { label: 'Oil on market', value: this.salesData.oil},    
       { label: 'Final projected oil', value: this.salesData.totalOil },
+      { label: 'Oil needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalFood / 7.75) },
+      { label: 'Oil needed for oil jump', value: Math.floor(this.salesData.totalFood / 8) },
     ];
   }
 

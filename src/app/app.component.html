@@ -1,53 +1,21 @@
 <mat-card>
-  <mat-toolbar color="primary"> HH's EE Tool </mat-toolbar>
+  <mat-toolbar color="primary"> FFO Calculator</mat-toolbar>
   <mat-card-content>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Enter Sales Data</mat-label>
-      <textarea matInput (keyup)="parse($event)"></textarea>
+      <textarea matInput (input)="parse($event)"></textarea>
     </mat-form-field>
-    <mat-list>
-      <mat-list-item>Sum (if everything sells): {{ salesData.sum | number: '1.0-0' }}</mat-list-item>
-      <mat-list-item> Oil total: {{ salesData.oil | number: '1.0-0' }} </mat-list-item>
-      <mat-list-item>
-        Bushels total: {{ salesData.bushels | number: '1.0-0' }}
-      </mat-list-item>
-    </mat-list>
+    
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Enter Raw Text from Advisor page</mat-label>
-      <textarea matInput (keyup)="extractValues($event)"></textarea>
+      <textarea matInput (input)="extractValues($event)"></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width-input">
       <mat-label>Days left</mat-label>
-      <input matInput type="number" (keyup)="daysLeft($event)" />
+      <input matInput type="number" disabled="true" [value]="salesData.days" />
     </mat-form-field>
-
-    <!-- <mat-form-field appearance="outline">
-      <mat-label>Turns on hand</mat-label>
-      <input matInput type="number" (keyup)="turnHand($event)" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Food production</mat-label>
-      <input matInput type="number" (keyup)="foodProd($event)" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Oil production</mat-label>
-      <input matInput type="number" (keyup)="oilProd($event)" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Food on hand</mat-label>
-      <input matInput type="number" (keyup)="foodHand($event)" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Oil on hand</mat-label>
-      <input matInput type="number" (keyup)="oilHand($event)" />
-    </mat-form-field> -->
-
     <table mat-table [dataSource]="tableData" class="mat-elevation-z2">
       <!-- Label Column -->
       <ng-container matColumnDef="label">
@@ -66,6 +34,51 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+
+    <mat-grid-list cols="2">
+<mat-grid-tile>
+  <table mat-table [dataSource]="tableDataFood" class="mat-elevation-z2">
+    <!-- Label Column -->
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef>Item</th>
+      <td mat-cell *matCellDef="let element">{{ element.label }}</td>
+    </ng-container>
+
+    <!-- Value Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef>Value</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.value | number: '1.0-0' }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-grid-tile>
+<mat-grid-tile>
+  <table mat-table [dataSource]="tableDataOil" class="mat-elevation-z2">
+    <!-- Label Column -->
+    <ng-container matColumnDef="label">
+      <th mat-header-cell *matHeaderCellDef>Item</th>
+      <td mat-cell *matCellDef="let element">{{ element.label }}</td>
+    </ng-container>
+
+    <!-- Value Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef>Value</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.value | number: '1.0-0' }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</mat-grid-tile>
+    </mat-grid-list>
+
+    
 
 
   </mat-card-content>

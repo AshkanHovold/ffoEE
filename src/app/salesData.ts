@@ -71,7 +71,7 @@ export class SalesData {
       let price = parseFloat(amountAndPrice[1].replaceAll(',', ''));
 
       this.sum += amount * price; // accumulate total sales
-
+      this.sum = this.sum * 0.94;
       if (line.includes('Bushels')) {
         this.bushels += amount;
       }
