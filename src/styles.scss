@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/theming";
+
+$my-app-primary: mat-palette($mat-red);
+$my-app-accent: mat-palette($mat-pink, A200, A100, A400);
+$my-app-warn: mat-palette($mat-red);
+
+$my-app-theme: mat-dark-theme($my-app-primary, $my-app-accent, $my-app-warn);
+
+// Include the default theme styles
+@include angular-material-theme($my-app-theme);
+
+body {
+  background-color: map-get(map-get($my-app-theme, background), background);
+}
