@@ -13,6 +13,7 @@ export class SalesData {
   turnsOnHand = 0;
   sum = 0;
   days = 0;
+  nw = 0;
 
   calcFoodToProduce() {
     debugger;

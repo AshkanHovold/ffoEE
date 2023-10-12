@@ -1,12 +1,10 @@
 <mat-card>
   <mat-toolbar color="primary"> FFO Calculator</mat-toolbar>
-  <mat-card-content>
+    <mat-card-content>
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Enter Sales Data</mat-label>
       <textarea matInput (input)="parse($event)"></textarea>
-    </mat-form-field>
-    
-
+    </mat-form-field>    
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Enter Raw Text from Advisor page</mat-label>
       <textarea matInput (input)="extractValues($event)"></textarea>
@@ -17,13 +15,13 @@
       <input matInput type="number" disabled="true" [value]="salesData.days" />
     </mat-form-field>
     <table mat-table [dataSource]="tableData" class="mat-elevation-z2">
-      <!-- Label Column -->
+      
       <ng-container matColumnDef="label">
         <th mat-header-cell *matHeaderCellDef>Item</th>
         <td mat-cell *matCellDef="let element">{{ element.label }}</td>
       </ng-container>
 
-      <!-- Value Column -->
+      
       <ng-container matColumnDef="value">
         <th mat-header-cell *matHeaderCellDef>Value</th>
         <td mat-cell *matCellDef="let element">
@@ -57,14 +55,11 @@
   </table>
 </mat-grid-tile>
 <mat-grid-tile>
-  <table mat-table [dataSource]="tableDataOil" class="mat-elevation-z2">
-    <!-- Label Column -->
+  <table mat-table [dataSource]="tableDataOil" class="mat-elevation-z2">    
     <ng-container matColumnDef="label">
       <th mat-header-cell *matHeaderCellDef>Item</th>
       <td mat-cell *matCellDef="let element">{{ element.label }}</td>
-    </ng-container>
-
-    <!-- Value Column -->
+    </ng-container>    
     <ng-container matColumnDef="value">
       <th mat-header-cell *matHeaderCellDef>Value</th>
       <td mat-cell *matCellDef="let element">
@@ -77,9 +72,5 @@
   </table>
 </mat-grid-tile>
     </mat-grid-list>
-
-    
-
-
   </mat-card-content>
 </mat-card>

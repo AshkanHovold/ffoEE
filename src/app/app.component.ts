@@ -41,6 +41,9 @@ export class AppComponent implements OnInit {
       { label: `Turns left (${this.salesData.turnsOnHand}) + (${Math.floor(this.salesData.days * 78)})`, value: this.salesData.turnsLeft },
       { label: 'Turns on hand', value: this.salesData.turnsOnHand },  
       { label: 'Sum (if everything on market sells)', value: this.salesData.sum },      
+      { label: 'Estimated stock NW (pm jump)', value: Math.floor(this.salesData.totalFood * 35 / 167) },
+      { label: 'Estimated final NW (pm jump, 60% of pre jump nw kept + est stock nw)', 
+      value: Math.floor((this.salesData.totalFood * 35 / 167) + (this.salesData.nw * 0.6)) },            
     ];
     this.tableDataFood = [
       
@@ -108,60 +111,7 @@ export class AppComponent implements OnInit {
       this.updateTableData();
     }
   }
-  extractValuesold(event: any): any {
-    const input = event.target.value;
-    const extracted: any = {};
-
-    // Money
-    const moneyMatch = input.match(/Money:\s*\$([\d,]+)/);
-    if (moneyMatch) extracted.money = +moneyMatch[1].replace(/,/g, '');
-
-    // Food
-    const foodMatch = input.match(/Food:\s*([\d,]+)\s*Bushels/);
-    if (foodMatch) extracted.bushels = +foodMatch[1].replace(/,/g, '');
-
-    // Oil
-    const oilMatch = input.match(/Oil\s*([\d,]+)/);
-
-    if (oilMatch) {
-      extracted.oil = parseInt(oilMatch[1].replace(/,/g, ''), 10); // Removes commas and converts the extracted string value to a number
-    }
-
-    // Networth
-    const networthMatch = input.match(/Networth:\s*\$([\d,]+)/);
-    if (networthMatch) extracted.networth = +networthMatch[1].replace(/,/g, '');
-
-    const foodProductionMatch = input.match(
-      /Food\s*[\d,]+\s*Production\s*([\d,]+)/
-    );
-
-    if (foodProductionMatch) {
-      extracted.bushelProduction = +foodProductionMatch[1].replace(/,/g, '');
-    }
-
-    const oilProductionMatch = input.match(
-      /Oil\s*[\d,]+\s*Production\s*([\d,]+)/
-    );
-
-    if (oilProductionMatch) {
-      extracted.oilProduction = +oilProductionMatch[1].replace(/,/g, '');
-    }
-    const turnsLeftMatch = input.match(/Turns Left\s*(\d+)/);
-
-    if (turnsLeftMatch) {
-      extracted.turnsLeft = +turnsLeftMatch[1].replace(/,/g, '');
-    }
-
-    const turnsStoredMatch = input.match(/Turns Stored\s*(\d+)/);
-
-    if (turnsStoredMatch) {
-      extracted.turnsStored = +turnsStoredMatch[1].replace(/,/g, '');
-    }
-
-    // ... (Continue for other values)
-    console.log(extracted);
-    return extracted;
-  }
+  
 
   extractValues(event: any): any {
     const input = event.target.value;
@@ -190,6 +140,7 @@ export class AppComponent implements OnInit {
     const networthMatch = input.match(/Networth:\s*\$([\d,]+)/);
     if (networthMatch)
       extracted.networth = parseInt(networthMatch[1].replace(/,/g, ''), 10);
+      this.salesData.nw = extracted.networth;
 
     const foodProductionMatch = input.match(
       /Food\s*[\d,]+\s*Production\s*[\d,]+\s*Consumption\s*[\d,]+\s*Net Change\s*([\d,]+)/
