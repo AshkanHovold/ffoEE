@@ -14,6 +14,7 @@ export class SalesData {
   sum = 0;
   days = 0;
   nw = 0;
+  netIncome = 0;
 
   calcFoodToProduce() {
     debugger;

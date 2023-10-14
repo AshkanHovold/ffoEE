@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.salesData = new SalesData();
     this.salesData.setDaysLeft(this.daysBetween(this.serverEnds, this.currentTime));
+    this.salesData.calcAll();
   }
   name = 'Angular ' + VERSION.major;
 
@@ -40,7 +41,8 @@ export class AppComponent implements OnInit {
     this.tableData = [
       { label: `Turns left (${this.salesData.turnsOnHand}) + (${Math.floor(this.salesData.days * 78)})`, value: this.salesData.turnsLeft },
       { label: 'Turns on hand', value: this.salesData.turnsOnHand },  
-      { label: 'Sum (if everything on market sells)', value: this.salesData.sum },      
+      { label: 'Sum (if everything on market sells)', value: this.salesData.sum },  
+      { label: 'Cash income (not cashing) ', value: Math.floor(this.salesData.netIncome * this.salesData.turnsLeft) },      
       { label: 'Estimated stock NW (pm jump)', value: Math.floor(this.salesData.totalFood * 35 / 167) },
       { label: 'Estimated final NW (pm jump, 60% of pre jump nw kept + est stock nw)', 
       value: Math.floor((this.salesData.totalFood * 35 / 167) + (this.salesData.nw * 0.6)) },            
@@ -52,8 +54,8 @@ export class AppComponent implements OnInit {
       { label: 'Food On Hand', value: this.salesData.foodOnHand },
       { label: 'Food on market', value: this.salesData.bushels},    
       { label: 'Final projected food', value: this.salesData.totalFood },
-      { label: 'Food needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalOil * 7.75) },
-      { label: 'Food needed for oil jump', value: Math.floor(this.salesData.totalOil * 8) },
+      { label: 'Bushels needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalOil * 7.75) },
+      { label: 'Bushels needed for oil jump (non 100% build cost)', value: Math.floor(this.salesData.totalOil * 8) },
     ];
 
     this.tableDataOil = [
@@ -63,7 +65,7 @@ export class AppComponent implements OnInit {
       { label: 'Oil on market', value: this.salesData.oil},    
       { label: 'Final projected oil', value: this.salesData.totalOil },
       { label: 'Oil needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalFood / 7.75) },
-      { label: 'Oil needed for oil jump', value: Math.floor(this.salesData.totalFood / 8) },
+      { label: 'Oil needed for oil jump (non 100% build cost)', value: Math.floor(this.salesData.totalFood / 8) },
     ];
   }
 
@@ -138,9 +140,19 @@ export class AppComponent implements OnInit {
 
     // Networth
     const networthMatch = input.match(/Networth:\s*\$([\d,]+)/);
-    if (networthMatch)
+    if (networthMatch) {
       extracted.networth = parseInt(networthMatch[1].replace(/,/g, ''), 10);
       this.salesData.nw = extracted.networth;
+    }
+
+    const netIncomeMatch = input.match(/Net Income\s*\$([\d,]+)/);
+
+    if (netIncomeMatch) {
+        const netIncome = parseInt(netIncomeMatch[1].replace(/,/g, ''), 10);        
+        extracted.netIncome = netIncome;
+        this.salesData.netIncome = netIncome;
+    }
+      
 
     const foodProductionMatch = input.match(
       /Food\s*[\d,]+\s*Production\s*[\d,]+\s*Consumption\s*[\d,]+\s*Net Change\s*([\d,]+)/
