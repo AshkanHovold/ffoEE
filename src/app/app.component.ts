@@ -1,23 +1,45 @@
 // prettier-ignore
 import { Component, OnInit, VERSION } from '@angular/core';
 import { SalesData } from './salesData';
+import { GrabHelper, TableData } from './grabHelper';
+import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  salesData:SalesData = new SalesData();
+  salesData: SalesData = new SalesData();
   currentTime: string = new Date().toISOString();
-  serverEnds:string = new Date(Date.UTC(2023, 9, 16, 23, 59)).toISOString();
+  serverEnds: string = new Date(Date.UTC(2023, 9, 16, 23, 59)).toISOString();
+  grabInfoRows: MatTableDataSource<TableData> =
+    new MatTableDataSource<TableData>();
+  bpt = 308;
+  rawGrabText: string = '';
   ngOnInit(): void {
     this.salesData = new SalesData();
-    this.salesData.setDaysLeft(this.daysBetween(this.serverEnds, this.currentTime));
+    this.salesData.setDaysLeft(
+      this.daysBetween(this.serverEnds, this.currentTime)
+    );
     this.salesData.calcAll();
   }
   name = 'Angular ' + VERSION.major;
 
   displayedColumns: string[] = ['label', 'value'];
+  grabInfoColumns: string[] = [
+    'Rank',
+    'CountryName',
+    'Number',
+    'Land',
+    'Networth',
+    'Gov',
+    'SSReturn',
+    'BotType',
+    'DR',
+    'C:CDR',
+    'EstSSBreak',
+    'AcresPerTurn',
+  ];
   tableData: any[] = [];
   tableDataFood: any[] = [];
   tableDataOil: any[] = [];
@@ -26,46 +48,77 @@ export class AppComponent implements OnInit {
     // Parse the ISO strings into Date objects
     const date1 = new Date(isoDate1);
     const date2 = new Date(isoDate2);
-  
+
     // Calculate the difference in milliseconds
-    const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
-  
+    const differenceInMilliseconds = Math.abs(
+      date2.getTime() - date1.getTime()
+    );
+
     // Convert the difference from milliseconds to days
     const daysDifference = differenceInMilliseconds / (1000 * 60 * 60 * 24);
-  
+
     return daysDifference;
   }
 
-
   updateTableData() {
     this.tableData = [
-      { label: `Turns left (${this.salesData.turnsOnHand}) + (${Math.floor(this.salesData.days * 78)})`, value: this.salesData.turnsLeft },
-      { label: 'Turns on hand', value: this.salesData.turnsOnHand },  
-      { label: 'Sum (if everything on market sells)', value: this.salesData.sum },  
-      { label: 'Cash income (not cashing) ', value: Math.floor(this.salesData.netIncome * this.salesData.turnsLeft) },      
-      { label: 'Estimated stock NW (pm jump)', value: Math.floor(this.salesData.totalFood * 35 / 167) },
-      { label: 'Estimated final NW (pm jump, 60% of pre jump nw kept + est stock nw)', 
-      value: Math.floor((this.salesData.totalFood * 35 / 167) + (this.salesData.nw * 0.6)) },            
+      {
+        label: `Turns left (${this.salesData.turnsOnHand}) + (${Math.floor(
+          this.salesData.days * 78
+        )})`,
+        value: this.salesData.turnsLeft,
+      },
+      { label: 'Turns on hand', value: this.salesData.turnsOnHand },
+      {
+        label: 'Sum (if everything on market sells)',
+        value: this.salesData.sum,
+      },
+      {
+        label: 'Cash income (not cashing) ',
+        value: Math.floor(this.salesData.netIncome * this.salesData.turnsLeft),
+      },
+      {
+        label: 'Estimated stock NW (pm jump)',
+        value: Math.floor((this.salesData.totalFood * 35) / 167),
+      },
+      {
+        label:
+          'Estimated final NW (pm jump, 60% of pre jump nw kept + est stock nw)',
+        value: Math.floor(
+          (this.salesData.totalFood * 35) / 167 + this.salesData.nw * 0.6
+        ),
+      },
     ];
     this.tableDataFood = [
-      
-      { label: 'Food Production', value: this.salesData.foodProduction },      
-      { label: 'Food to be produced', value: this.salesData.foodToProduce },      
+      { label: 'Food Production', value: this.salesData.foodProduction },
+      { label: 'Food to be produced', value: this.salesData.foodToProduce },
       { label: 'Food On Hand', value: this.salesData.foodOnHand },
-      { label: 'Food on market', value: this.salesData.bushels},    
+      { label: 'Food on market', value: this.salesData.bushels },
       { label: 'Final projected food', value: this.salesData.totalFood },
-      { label: 'Bushels needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalOil * 7.75) },
-      { label: 'Bushels needed for oil jump (non 100% build cost)', value: Math.floor(this.salesData.totalOil * 8) },
+      {
+        label: 'Bushels needed for oil jump (100% build cost)',
+        value: Math.floor(this.salesData.totalOil * 7.75),
+      },
+      {
+        label: 'Bushels needed for oil jump (non 100% build cost)',
+        value: Math.floor(this.salesData.totalOil * 8),
+      },
     ];
 
     this.tableDataOil = [
       { label: 'Oil Production', value: this.salesData.oilProduction },
-      { label: 'Oil to be produced', value: this.salesData.oilToProduce },      
+      { label: 'Oil to be produced', value: this.salesData.oilToProduce },
       { label: 'Oil On Hand', value: this.salesData.oilOnHand },
-      { label: 'Oil on market', value: this.salesData.oil},    
+      { label: 'Oil on market', value: this.salesData.oil },
       { label: 'Final projected oil', value: this.salesData.totalOil },
-      { label: 'Oil needed for oil jump (100% build cost)', value: Math.floor(this.salesData.totalFood / 7.75) },
-      { label: 'Oil needed for oil jump (non 100% build cost)', value: Math.floor(this.salesData.totalFood / 8) },
+      {
+        label: 'Oil needed for oil jump (100% build cost)',
+        value: Math.floor(this.salesData.totalFood / 7.75),
+      },
+      {
+        label: 'Oil needed for oil jump (non 100% build cost)',
+        value: Math.floor(this.salesData.totalFood / 8),
+      },
     ];
   }
 
@@ -113,7 +166,6 @@ export class AppComponent implements OnInit {
       this.updateTableData();
     }
   }
-  
 
   extractValues(event: any): any {
     const input = event.target.value;
@@ -148,11 +200,10 @@ export class AppComponent implements OnInit {
     const netIncomeMatch = input.match(/Net Income\s*\$([\d,]+)/);
 
     if (netIncomeMatch) {
-        const netIncome = parseInt(netIncomeMatch[1].replace(/,/g, ''), 10);        
-        extracted.netIncome = netIncome;
-        this.salesData.netIncome = netIncome;
+      const netIncome = parseInt(netIncomeMatch[1].replace(/,/g, ''), 10);
+      extracted.netIncome = netIncome;
+      this.salesData.netIncome = netIncome;
     }
-      
 
     const foodProductionMatch = input.match(
       /Food\s*[\d,]+\s*Production\s*[\d,]+\s*Consumption\s*[\d,]+\s*Net Change\s*([\d,]+)/
@@ -195,6 +246,28 @@ export class AppComponent implements OnInit {
     // ... (Continue for other values)
     console.log(extracted);
     return extracted;
+  }
+
+  getGrabInfo(input: any) {
+    this.rawGrabText = input.target.value;
+    const grabHelper = new GrabHelper();
+
+    this.calcGrab(this.rawGrabText);
+  }
+  updateBpt(input: any) {
+    debugger;
+    this.bpt = input.target.value;
+  }
+  calcGrab(rawText: string) {
+    const grabHelper = new GrabHelper();
+    let result = grabHelper.processGrabInfo(rawText, this.bpt);
+    this.grabInfoRows.data = result.filter((r) => r !== null) as TableData[];
+  }
+  reCalcGrab() {
+    this.calcGrab(this.rawGrabText);
+  }
+  getEEstatsLink(row: TableData): string {
+    return `https://www.eestats.com/alliance/country/${row.Number}`;
   }
 }
 

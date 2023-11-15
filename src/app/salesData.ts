@@ -17,7 +17,6 @@ export class SalesData {
   netIncome = 0;
 
   calcFoodToProduce() {
-    debugger;
     this.foodToProduce = this.turnsLeft * this.foodProduction;
   }
 

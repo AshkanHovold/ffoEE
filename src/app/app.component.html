@@ -1,76 +1,185 @@
-<mat-card>
-  <mat-toolbar color="primary"> FFO Calculator</mat-toolbar>
-    <mat-card-content>
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Enter Sales Data</mat-label>
-      <textarea matInput (input)="parse($event)"></textarea>
-    </mat-form-field>    
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Enter Raw Text from Advisor page</mat-label>
-      <textarea matInput (input)="extractValues($event)"></textarea>
-    </mat-form-field>
+<mat-tab-group>
+  <mat-tab>
 
-    <mat-form-field appearance="outline" class="full-width-input">
-      <mat-label>Days left</mat-label>
-      <input matInput type="number" disabled="true" [value]="salesData.days" />
-    </mat-form-field>
-    <table mat-table [dataSource]="tableData" class="mat-elevation-z2">
-      
-      <ng-container matColumnDef="label">
-        <th mat-header-cell *matHeaderCellDef>Item</th>
-        <td mat-cell *matCellDef="let element">{{ element.label }}</td>
-      </ng-container>
+    <ng-template mat-tab-label>
+      Stockpile
+    </ng-template>
+    <mat-card>
+      <mat-toolbar color="primary"> FFO Calculator</mat-toolbar>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Enter Sales Data</mat-label>
+          <textarea matInput (input)="parse($event)"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Enter Raw Text from Advisor page</mat-label>
+          <textarea matInput (input)="extractValues($event)"></textarea>
+        </mat-form-field>
 
-      
-      <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef>Value</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.value | number: '1.0-0' }}
-        </td>
-      </ng-container>
+        <mat-form-field appearance="outline" class="full-width-input">
+          <mat-label>Days left</mat-label>
+          <input matInput type="number" disabled="true" [value]="salesData.days" />
+        </mat-form-field>
+        <table mat-table [dataSource]="tableData" class="mat-elevation-z2">
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+          <ng-container matColumnDef="label">
+            <th mat-header-cell *matHeaderCellDef>Item</th>
+            <td mat-cell *matCellDef="let element">{{ element.label }}</td>
+          </ng-container>
 
-    <mat-grid-list cols="2">
-<mat-grid-tile>
-  <table mat-table [dataSource]="tableDataFood" class="mat-elevation-z2">
-    <!-- Label Column -->
-    <ng-container matColumnDef="label">
-      <th mat-header-cell *matHeaderCellDef>Item</th>
-      <td mat-cell *matCellDef="let element">{{ element.label }}</td>
-    </ng-container>
 
-    <!-- Value Column -->
-    <ng-container matColumnDef="value">
-      <th mat-header-cell *matHeaderCellDef>Value</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.value | number: '1.0-0' }}
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef>Value</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.value | number: '1.0-0' }}
+            </td>
+          </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</mat-grid-tile>
-<mat-grid-tile>
-  <table mat-table [dataSource]="tableDataOil" class="mat-elevation-z2">    
-    <ng-container matColumnDef="label">
-      <th mat-header-cell *matHeaderCellDef>Item</th>
-      <td mat-cell *matCellDef="let element">{{ element.label }}</td>
-    </ng-container>    
-    <ng-container matColumnDef="value">
-      <th mat-header-cell *matHeaderCellDef>Value</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.value | number: '1.0-0' }}
-      </td>
-    </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
-</mat-card>
+        <mat-grid-list cols="2">
+          <mat-grid-tile>
+            <table mat-table [dataSource]="tableDataFood" class="mat-elevation-z2">
+              <!-- Label Column -->
+              <ng-container matColumnDef="label">
+                <th mat-header-cell *matHeaderCellDef>Item</th>
+                <td mat-cell *matCellDef="let element">{{ element.label }}</td>
+              </ng-container>
+
+              <!-- Value Column -->
+              <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.value | number: '1.0-0' }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <table mat-table [dataSource]="tableDataOil" class="mat-elevation-z2">
+              <ng-container matColumnDef="label">
+                <th mat-header-cell *matHeaderCellDef>Item</th>
+                <td mat-cell *matCellDef="let element">{{ element.label }}</td>
+              </ng-container>
+              <ng-container matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.value | number: '1.0-0' }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card-content>
+    </mat-card>
+
+
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Grab
+    </ng-template>
+    <mat-card>
+      <mat-form-field appearance="outline" class="full-width-input">
+        <mat-label>Enter bpt</mat-label>
+        <input type="number" matInput (input)="updateBpt($event)" [value]="bpt" />
+      </mat-form-field>
+      <button mat-stroked-button (click)="reCalcGrab()" color="primary">Calculate</button>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Enter raw text from bot list target</mat-label>
+        <textarea matInput (input)="getGrabInfo($event)"></textarea>
+      </mat-form-field>
+
+      <!-- data-paste.component.html -->
+      <div class="mat-elevation-z8" *ngIf="grabInfoRows.data">
+        <table mat-table [dataSource]="grabInfoRows" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="Rank">
+            <th mat-header-cell *matHeaderCellDef> Rank </th>
+            <td mat-cell *matCellDef="let row"> {{row.Rank}} </td>
+          </ng-container>
+
+          <!-- Country Name Column -->
+          <ng-container matColumnDef="CountryName">
+            <th mat-header-cell *matHeaderCellDef> Country Name </th>
+            <td mat-cell *matCellDef="let row"> <a [href]="getEEstatsLink(row)" target="_blank">{{row.CountryName}}</a>
+            </td>
+          </ng-container>
+
+          <!-- Number Column -->
+          <ng-container matColumnDef="Number">
+            <th mat-header-cell *matHeaderCellDef> Country Number </th>
+            <td mat-cell *matCellDef="let row"> <a [href]="getEEstatsLink(row)" target="_blank">{{row.Number}}</a> </td>
+          </ng-container>
+
+          <!-- Land Column -->
+          <ng-container matColumnDef="Land">
+            <th mat-header-cell *matHeaderCellDef> Land </th>
+            <td mat-cell *matCellDef="let row"> {{row.Land}} </td>
+          </ng-container>
+
+          <!-- Land Column -->
+          <ng-container matColumnDef="Networth">
+            <th mat-header-cell *matHeaderCellDef> Networth </th>
+            <td mat-cell *matCellDef="let row"> {{row.Networth}} </td>
+          </ng-container>
+
+          <!-- Government Column -->
+          <ng-container matColumnDef="Gov">
+            <th mat-header-cell *matHeaderCellDef> Government </th>
+            <td mat-cell *matCellDef="let row"> {{row.Gov}} </td>
+          </ng-container>
+
+          <!-- SSReturn Column -->
+          <ng-container matColumnDef="SSReturn">
+            <th mat-header-cell *matHeaderCellDef> SSReturn </th>
+            <td mat-cell *matCellDef="let row"> {{row.SSReturn}} </td>
+          </ng-container>
+
+          <!-- BotType Column -->
+          <ng-container matColumnDef="BotType">
+            <th mat-header-cell *matHeaderCellDef> BotType </th>
+            <td mat-cell *matCellDef="let row"> {{row.BotType}} </td>
+          </ng-container>
+
+          <!-- SSReturn Column -->
+          <ng-container matColumnDef="DR">
+            <th mat-header-cell *matHeaderCellDef> DR </th>
+            <td mat-cell *matCellDef="let row"> {{row.DR}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="C:CDR">
+            <th mat-header-cell *matHeaderCellDef> C:C DR </th>
+            <td mat-cell *matCellDef="let row"> {{row.CCDR}} </td>
+          </ng-container>
+
+          <!-- EstSSBreak Column -->
+          <ng-container matColumnDef="EstSSBreak">
+            <th mat-header-cell *matHeaderCellDef> EstSSBreak </th>
+            <td mat-cell *matCellDef="let row"> {{row.EstSSBreak}} </td>
+          </ng-container>
+
+          <!-- Acres / Turn Column -->
+          <ng-container matColumnDef="AcresPerTurn">
+            <th mat-header-cell *matHeaderCellDef> Acres / Turn </th>
+            <td mat-cell *matCellDef="let row"> {{row.AcresPerTurn}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="grabInfoColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: grabInfoColumns;"></tr>
+        </table>
+      </div>
+
+      <p *ngIf="grabInfoRows.data">Total countries in list: {{grabInfoRows.data.length}}</p>
+
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

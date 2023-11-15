@@ -28,6 +28,20 @@ textarea {
 
 .full-width-input {
   width: 100%;
-
   margin-bottom: 10px;
+}
+
+.example-tab-icon {
+  margin-right: 10px;
+}
+
+button {
+  margin-bottom: 5px;
+}
+
+a:link,
+a:visited {
+  color: red; /* Or any color of your choice */
+  text-decoration: none; /* Example property - removes underline from links */
+  /* Add any other styles you want to apply to your links */
 }
