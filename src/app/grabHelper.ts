@@ -93,7 +93,7 @@ export class GrabHelper {
     bpt: number
   ) {
     const toBuild = estimatedLandGrabbed - estimatedFarms;
-    const turnsToUse = 2 + toBuild / bpt; //if it takes less than 1 turn to build it all, we will round it up to 1.
+    const turnsToUse = 2 + toBuild / bpt; 
 
     const acresPerTurn = Math.round(estimatedLandGrabbed / turnsToUse);
     return acresPerTurn;
