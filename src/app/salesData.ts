@@ -15,6 +15,8 @@ export class SalesData {
   days = 0;
   nw = 0;
   netIncome = 0;
+  serverEnds = '';
+  currentTime = '';
 
   calcFoodToProduce() {
     this.foodToProduce = this.turnsLeft * this.foodProduction;
@@ -34,7 +36,7 @@ export class SalesData {
   setDaysLeft(days: number) {
     this.days = days;
     this.updateTurnsLeft();
-    this.calcAll();
+    //this.calcAll();
   }
   updateTurnsLeft() {
     this.turnsLeft = Math.floor(this.days * 78) + this.turnsOnHand;
@@ -47,10 +49,29 @@ export class SalesData {
   }
 
   calcAll() {
+    this.setDaysLeft(
+      this.daysBetween(this.currentTime, this.serverEnds)
+    );
     this.calcFoodToProduce();
     this.calcOilToProduce();
     this.calcTotalFood();
     this.calcTotalOil();
+  }
+
+  daysBetween(isoDate1: string, isoDate2: string): number {
+    // Parse the ISO strings into Date objects
+    const date1 = new Date(isoDate1);
+    const date2 = new Date(isoDate2);
+
+    // Calculate the difference in milliseconds
+    const differenceInMilliseconds = Math.abs(
+      date2.getTime() - date1.getTime()
+    );
+
+    // Convert the difference from milliseconds to days
+    const daysDifference = differenceInMilliseconds / (1000 * 60 * 60 * 24);
+
+    return daysDifference;
   }
 
   processData(value: string) {
