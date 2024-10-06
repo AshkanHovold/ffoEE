@@ -11,19 +11,26 @@ import { MatTableDataSource } from '@angular/material/table';
 export class AppComponent implements OnInit {
   salesData: SalesData = new SalesData();
   currentTime: string = new Date().toISOString();
-  serverEnds: string = new Date(Date.UTC(2023, 9, 16, 23, 59)).toISOString();
+  serverEnds: string = new Date().toISOString();
   grabInfoRows: MatTableDataSource<TableData> =
     new MatTableDataSource<TableData>();
   bpt = 308;
   rawGrabText: string = '';
   ngOnInit(): void {
     this.salesData = new SalesData();
-    this.salesData.setDaysLeft(
-      this.daysBetween(this.serverEnds, this.currentTime)
-    );
+    this.salesData.currentTime = this.currentTime;
+    this.salesData.serverEnds = this.serverEnds;
     this.salesData.calcAll();
   }
   name = 'Angular ' + VERSION.major;
+  
+  setEndDate(event: any) {
+    
+    this.salesData.serverEnds = new Date(event.target.value).toISOString();
+    this.salesData.currentTime = new Date().toISOString();
+    this.salesData.calcAll();
+    this.updateTableData();
+  }
 
   displayedColumns: string[] = ['label', 'value'];
   grabInfoColumns: string[] = [
@@ -44,21 +51,7 @@ export class AppComponent implements OnInit {
   tableDataFood: any[] = [];
   tableDataOil: any[] = [];
 
-  daysBetween(isoDate1: string, isoDate2: string): number {
-    // Parse the ISO strings into Date objects
-    const date1 = new Date(isoDate1);
-    const date2 = new Date(isoDate2);
-
-    // Calculate the difference in milliseconds
-    const differenceInMilliseconds = Math.abs(
-      date2.getTime() - date1.getTime()
-    );
-
-    // Convert the difference from milliseconds to days
-    const daysDifference = differenceInMilliseconds / (1000 * 60 * 60 * 24);
-
-    return daysDifference;
-  }
+ 
 
   updateTableData() {
     this.tableData = [
